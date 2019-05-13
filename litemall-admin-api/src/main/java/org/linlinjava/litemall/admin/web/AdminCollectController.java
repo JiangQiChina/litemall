@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/admin/collect")
@@ -39,11 +37,6 @@ public class AdminCollectController {
                        @Sort @RequestParam(defaultValue = "add_time") String sort,
                        @Order @RequestParam(defaultValue = "desc") String order) {
         List<LitemallCollect> collectList = collectService.querySelective(userId, valueId, page, limit, sort, order);
-        int total = collectService.countSelective(userId, valueId, page, limit, sort, order);
-        Map<String, Object> data = new HashMap<>();
-        data.put("total", total);
-        data.put("items", collectList);
-
-        return ResponseUtil.ok(data);
+        return ResponseUtil.okList(collectList);
     }
 }

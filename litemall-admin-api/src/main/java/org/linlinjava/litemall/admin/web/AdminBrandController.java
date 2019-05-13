@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/admin/brand")
@@ -38,12 +36,7 @@ public class AdminBrandController {
                        @Sort @RequestParam(defaultValue = "add_time") String sort,
                        @Order @RequestParam(defaultValue = "desc") String order) {
         List<LitemallBrand> brandList = brandService.querySelective(id, name, page, limit, sort, order);
-        int total = brandService.countSelective(id, name, page, limit, sort, order);
-        Map<String, Object> data = new HashMap<>();
-        data.put("total", total);
-        data.put("items", brandList);
-
-        return ResponseUtil.ok(data);
+        return ResponseUtil.okList(brandList);
     }
 
     private Object validate(LitemallBrand brand) {

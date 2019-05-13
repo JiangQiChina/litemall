@@ -18,9 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/admin/coupon")
@@ -42,16 +40,11 @@ public class AdminCouponController {
                        @Sort @RequestParam(defaultValue = "add_time") String sort,
                        @Order @RequestParam(defaultValue = "desc") String order) {
         List<LitemallCoupon> couponList = couponService.querySelective(name, type, status, page, limit, sort, order);
-        int total = couponService.countSelective(name, type, status, page, limit, sort, order);
-        Map<String, Object> data = new HashMap<>();
-        data.put("total", total);
-        data.put("items", couponList);
-
-        return ResponseUtil.ok(data);
+        return ResponseUtil.okList(couponList);
     }
 
-    @RequiresPermissions("admin:coupon:list")
-    @RequiresPermissionsDesc(menu={"推广管理" , "优惠券管理"}, button="查询")
+    @RequiresPermissions("admin:coupon:listuser")
+    @RequiresPermissionsDesc(menu={"推广管理" , "优惠券管理"}, button="查询用户")
     @GetMapping("/listuser")
     public Object listuser(Integer userId, Integer couponId, Short status,
                        @RequestParam(defaultValue = "1") Integer page,
@@ -59,12 +52,7 @@ public class AdminCouponController {
                        @Sort @RequestParam(defaultValue = "add_time") String sort,
                        @Order @RequestParam(defaultValue = "desc") String order) {
         List<LitemallCouponUser> couponList = couponUserService.queryList(userId, couponId, status, page, limit, sort, order);
-        int total = couponUserService.countList(userId, couponId, status, page, limit, sort, order);
-        Map<String, Object> data = new HashMap<>();
-        data.put("total", total);
-        data.put("items", couponList);
-
-        return ResponseUtil.ok(data);
+        return ResponseUtil.okList(couponList);
     }
 
     private Object validate(LitemallCoupon coupon) {
